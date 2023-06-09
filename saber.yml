@@ -1,0 +1,22 @@
+version: 2.0
+project_type: python
+ 
+stages:
+  - build
+ 
+python-build:
+  image: yfd_python3:latest
+  stage: build
+  script:
+    - ln -nsf `pwd` /home/shared/apps/$PROJECT && cd /home/shared/apps/$PROJECT  # 重要，使构建时和执行时的 venv 解释器路径一致
+    - python3 -m venv /home/shared/apps/$PROJECT/.venv
+    - .venv/bin/pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
+    - .venv/bin/pip install -U -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+  artifacts:
+    name: python-build-artifacts
+    docker: true
+    upload: true
+    path:
+      - "**/*"
+    tags:
+      - default
