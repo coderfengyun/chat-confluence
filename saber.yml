@@ -5,7 +5,7 @@ stages:
   - build
  
 python-build:
-  image: yfd_python3:latest
+  image: yfd_python3:3.11.3
   stage: build
   script:
     - ln -nsf `pwd` /home/shared/apps/$PROJECT && cd /home/shared/apps/$PROJECT  # 重要，使构建时和执行时的 venv 解释器路径一致
@@ -15,7 +15,6 @@ python-build:
   artifacts:
     name: python-build-artifacts
     docker: true
-    upload: true
     path:
       - "**/*"
     tags:
