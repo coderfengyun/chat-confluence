@@ -21,7 +21,7 @@ _ = load_dotenv(find_dotenv()) # read local .env file
 def initiate_agent():
     embeddings = OpenAIEmbeddings(deployment="embeddings_model", chunk_size=1)
     redis_url_str = os.environ["REDIS_URL"]
-    db = Redis.from_existing_index(embeddings, redis_url="redis://localhost:6379", index_name='chat_confluence_new')
+    db = Redis.from_existing_index(embeddings, redis_url=redis_url_str, index_name='chat_confluence_new')
     retriever = db.as_retriever()
     llm = AzureChatOpenAI(deployment_name="chat_confluence",model_name="gpt-35-turbo", verbose=True)
     memory = ConversationBufferWindowMemory(memory_key="chat_history", k=10, return_messages=True)
