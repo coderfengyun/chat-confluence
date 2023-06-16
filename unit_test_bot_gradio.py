@@ -1,7 +1,7 @@
 import gradio as gr
 import random
 import time
-from unit_test_generator import unit_tests_from_function
+from unit_test_generator_yield import unit_tests_from_function
 from threading import Thread
 
 with gr.Blocks() as demo:
@@ -17,11 +17,11 @@ with gr.Blocks() as demo:
         def print_to_console(text: str, end: str = "\n"):
             if end == "\n":
                 # create a new entry in the history
-                history[-1][1] = ""
+                history.append(["", ""])
             history[-1][1] += text
             print(text, end=end)
-        unit_tests_from_function(msg, print_text=True, print_function=print_to_console, approx_min_cases_to_cover=10)
-        return history
+            yield history
+        yield from unit_tests_from_function(msg, print_text=True, print_function=print_to_console, approx_min_cases_to_cover=10)
 
     def on_submit_click():
         chatbot.clear()
