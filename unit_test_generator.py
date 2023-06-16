@@ -28,13 +28,13 @@ color_prefix_by_role = {
 }
 
 
-def print_messages(messages, color_prefix_by_role=color_prefix_by_role) -> None:
+def print_messages(messages, color_prefix_by_role=color_prefix_by_role, print_function=print) -> None:
     """Prints messages sent to or from GPT."""
     for message in messages:
         role = message["role"]
         color_prefix = color_prefix_by_role[role]
         content = message["content"]
-        print(f"{color_prefix}\n[{role}]\n{content}")
+        print_function(f"{color_prefix}\n[{role}]\n{content}")
 
 
 def print_message_delta(delta, color_prefix_by_role=color_prefix_by_role, print_function=print) -> None:
@@ -82,7 +82,7 @@ def unit_tests_from_function(
     }
     explain_messages = [explain_system_message, explain_user_message]
     if print_text:
-        print_messages(explain_messages)
+        print_messages(explain_messages, print_function=print_function)
 
     explanation_response = openai.ChatCompletion.create(
         engine=chatgpt_deployment_id,
@@ -111,6 +111,7 @@ def unit_tests_from_function(
 - Take advantage of the features of `{unit_test_package}` to make the tests easy to write and maintain
 - Be easy to read and understand, with clean code and descriptive names
 - Be deterministic, so that the tests always pass or fail in the same way
+- Every case should be independent of the others, so that a failure in one test does not cause other tests to fail
 
 To help unit test the function above, list diverse scenarios that the function should be able to handle (and under each scenario, include a few examples as sub-bullets).""",
     }
@@ -121,7 +122,7 @@ To help unit test the function above, list diverse scenarios that the function s
         plan_user_message,
     ]
     if print_text:
-        print_messages([plan_user_message])
+        print_messages([plan_user_message], print_function=print_function)
     plan_response = openai.ChatCompletion.create(
         engine=chatgpt_deployment_id,
         model=plan_model,
@@ -156,7 +157,7 @@ To help unit test the function above, list diverse scenarios that the function s
             elaboration_user_message,
         ]
         if print_text:
-            print_messages([elaboration_user_message])
+            print_messages([elaboration_user_message], print_function=print_function)
         elaboration_response = openai.ChatCompletion.create(
             engine=chatgpt_deployment_id,
             model=plan_model,
@@ -207,7 +208,7 @@ To help unit test the function above, list diverse scenarios that the function s
         execute_messages += [elaboration_user_message, elaboration_assistant_message]
     execute_messages += [execute_user_message]
     if print_text:
-        print_messages([execute_system_message, execute_user_message])
+        print_messages([execute_system_message, execute_user_message], print_function=print_function)
 
     execute_response = openai.ChatCompletion.create(
         engine=chatgpt_deployment_id,

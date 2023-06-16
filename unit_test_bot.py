@@ -33,13 +33,15 @@ row2_place_holder = st.empty()
 
 
 
-def print_to_console(text: str, end: str):
+def print_to_console(text: str, end: str = "\n"):
     st.session_state["console_text"] += text
+    print(text, end=end)
+
     console_text = st.session_state["console_text"]
     markdown_container_1 = f'''
-<div id="scrollContainer"; style="background-color: #f0e68c; padding: 10px; border-radius: 5px; height:150px; overflow-y:scroll;">
+<div id="scrollContainer"; style="background-color: #f0e68c; padding: 10px; border-radius: 5px; height:300px; overflow-y:scroll;">
     {console_text}
-</div>
+</div>{end}
 '''
     row2_place_holder.markdown(markdown_container_1, unsafe_allow_html=True)
 
