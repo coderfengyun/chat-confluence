@@ -231,20 +231,5 @@ To help unit test the function above, list diverse scenarios that the function s
         javalang.parse.parse(code)
     except SyntaxError as e:
         print(f"Syntax error in generated code: {e}")
-        if reruns_if_fail > 0:
-            print("Rerunning...")
-            return unit_tests_from_function(
-                function_to_test=function_to_test,
-                unit_test_package=unit_test_package,
-                approx_min_cases_to_cover=approx_min_cases_to_cover,
-                print_text=print_text,
-                explain_model=explain_model,
-                plan_model=plan_model,
-                execute_model=execute_model,
-                temperature=temperature,
-                reruns_if_fail=reruns_if_fail
-                - 1,  # decrement rerun counter when calling again
-            )
-
     # return the unit test as a string
     return code

@@ -19,11 +19,11 @@ from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv()) # read local .env file
 
 def initiate_agent():
-    embeddings = OpenAIEmbeddings(deployment="embeddings_model", chunk_size=1)
+    embeddings = OpenAIEmbeddings(deployment="embeddings_model_jp", chunk_size=1, openai_api_version="2023-03-15-preview")
     redis_url_str = os.environ["REDIS_URL"]
     db = Redis.from_existing_index(embeddings, redis_url=redis_url_str, index_name='chat_confluence_new')
     retriever = db.as_retriever()
-    llm = AzureChatOpenAI(deployment_name="chat_confluence",model_name="gpt-35-turbo", verbose=True)
+    llm = AzureChatOpenAI(deployment_name="chat-confluence-jp-0613", model_name="gpt-35-turbo-16k", verbose=True, openai_api_version="2023-03-15-preview")
     memory = ConversationBufferWindowMemory(memory_key="chat_history", k=10, return_messages=True)
     qa = CustomConversationalRetrievalChain.from_llm(llm, retriever, return_source_documents=False, memory=memory, verbose=True)
     return qa
